@@ -57,7 +57,13 @@ curl -X POST -H "Content-Type: application/json" \
 3. Query DNS records:
 ```
 dig @127.0.0.1 -p 9090 example.com
+```
+Replace 127.0.0.1 with your actual windows host IP
+```
+ipconfig | findstr /i "IPv4 Address" 
+```
 # or for Windows:
+```
 nslookup -port=9090 example.com 127.0.0.1
 ```
 4.View all records:
@@ -67,16 +73,23 @@ curl http://localhost:3000/records
 
 ## Troubleshooting
 ### Connection refused?
-- Check firewall rules (allow UDP/TCP on 9090)
+- Check firewall rules (allow UDP/TCP on 9090):
+```
+New-NetFirewallRule -DisplayName "DNS-Server" -Direction Inbound -Protocol UDP -LocalPort 9090 -Action Allow
+```
 - Run as admin/root (required for ports < 1024)
 - Verify server is running:
-```
-netstat -anu | grep 9090  # Linux
-Get-NetUDPEndpoint -LocalPort 9090  # PowerShell
-```
+ ```
+ netstat -anu | grep 9090  # Linux
+ Get-NetUDPEndpoint -LocalPort 9090  # PowerShell
+ ```
 ### Web interface not working?
 - Ensure Fiber server is running on port 3000
-- Check for port conflicts
+- Check for port conflicts:
+```
+# Check specific port (e.g., 9090):
+Get-NetTCPConnection -LocalPort 9090
+```
 
 ## Things to keep in mind:
 - In-memory storage (records lost on restart)
