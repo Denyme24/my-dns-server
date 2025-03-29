@@ -2,6 +2,11 @@
 
 A simple DNS server written in Go with a web management interface using Fiber. Perfect for learning DNS fundamentals and local network management.
 
+## 📖 Detailed Blog Post Explaining DNS & This Project
+For a deep dive into **DNS fundamentals** and the **development journey** behind this server, read my blog post:  
+[DNS Explained: From Basics to Building My Own DNS Server](https://dev.to/denyme24/dns-explained-from-basics-to-building-my-own-dns-server-25o6)  
+*(Includes DNS resolution flow, record types, and implementation challenges!)*
+
 ## Features
 
 - 🚀 Basic DNS (A record) resolution
