@@ -1,0 +1,8 @@
+services:
+  dns-server:
+    build: .
+    ports:
+      - "9090:9090/udp"  # Add UDP protocol explicitly
+      - "9090:9090"      # Also map TCP for safety
+      - "3001:3000"      # Web interface
+    restart: always
