@@ -24,7 +24,7 @@ For a deep dive into **DNS fundamentals** and the **development journey** behind
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/go-dns-server.git
+git clone https://github.com/Denyme24/my-dns-server.git
 cd go-dns-server
 ```
 2. Install dependencies:
