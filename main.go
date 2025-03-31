@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"github.com/Denyme24/go-dns-server/env"
 	"github.com/gofiber/fiber/v2"
 	"github.com/miekg/dns"
+	"log"
 )
 
 // Our DNS records database (in-memory for this example)
@@ -27,7 +27,7 @@ func startDNSServer() {
 	// Set up DNS server
 	server := &dns.Server{
 		Addr: env.GetStringEnv("ADDRESS", "0.0.0.0:9090"), // Bind to all interfaces
-		Net:  env.GetStringEnv("PROTOCOLE", "udp"),
+		Net:  env.GetStringEnv("PROTOCOL", "udp"),
 	}
 
 	// Handle DNS requests
