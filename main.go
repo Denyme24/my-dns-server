@@ -2,10 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"maps"
+	"os"
+
 	"github.com/Denyme24/go-dns-server/env"
 	"github.com/gofiber/fiber/v2"
 	"github.com/miekg/dns"
-	"log"
+	"gopkg.in/yaml.v3"
 )
 
 // Our DNS records database (in-memory for this example)
@@ -29,13 +33,26 @@ func startDNSServer() {
 		Addr: env.GetStringEnv("ADDRESS", "0.0.0.0:9090"), // Bind to all interfaces
 		Net:  env.GetStringEnv("PROTOCOL", "udp"),
 	}
+	
+	// pulls additional dns records from yaml file
+	recordFileName := env.GetStringEnv("DNS_RECORD_FILE", "dnsRecords.yml")
+	savedRecords, err := recordsFromFile(recordFileName)
+	if err!= nil {
+		log.Println("Error pulling additional records from yaml file: ", err.Error())
+	}
+
+	// merge dns records - if they exist - into the existing map
+	// if a key is already in dnsRecords, the corresponding value will be updated
+	// with the one in the file...
+	
+	maps.Copy(dnsRecords, savedRecords)
 
 	// Handle DNS requests
 	dns.HandleFunc(".", handleDNSRequest)
 
 	// Start server
 	log.Printf("Starting DNS server on %s...", server.Addr)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatalf("Failed to start DNS server: %v", err)
 	} else {
@@ -97,4 +114,20 @@ func startWebServer() {
 
 	log.Printf("Starting web server on :3000...")
 	log.Fatal(app.Listen(":3000"))
+}
+
+func recordsFromFile(recordFileName string) (map[string]string, error) {
+	
+	// pulls additional dns records from yaml file
+
+	content, err := os.ReadFile(recordFileName)
+	if err != nil {
+		return nil, err
+	}
+	
+	var records map[string]string
+	if err = yaml.Unmarshal([]byte(content), &records); err != nil{
+		return nil, err
+	}
+	return records, nil
 }
